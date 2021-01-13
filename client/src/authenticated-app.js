@@ -1,9 +1,6 @@
-/** @jsxImportSource @emotion/react */
-import { jsx } from "@emotion/react";
 import * as React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import * as mq from "./styles/media-queries";
-import { useAuth0 } from "@auth0/auth0-react";
 import DashboardLayout from "./layouts/DashboardLayout";
 import DashboardView from "./views/DashboardView";
 import AccountView from "./views/AccountView";
@@ -12,7 +9,6 @@ import MainLayout from "./layouts/MainLayout";
 import NotFoundView from "./views/NotFoundView";
 
 function AuthenticatedApp() {
-  const { logout, user } = useAuth0();
   return (
     <BrowserRouter>
       <Routes>
