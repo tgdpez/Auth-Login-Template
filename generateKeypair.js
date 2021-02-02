@@ -3,10 +3,8 @@
  *
  * Make sure to save the private key elsewhere after generated!
  */
-import crypto from "crypto";
-import * as fs from "fs";
-import dirname from "./utils/dirname.js";
-const __dirname = dirname();
+const crypto = require("crypto");
+const fs = require("fs");
 
 function genKeyPair() {
   // Generates an object where the keys are stored in properties `privateKey` and `publicKey`
@@ -23,10 +21,10 @@ function genKeyPair() {
   });
 
   // Create the public key file
-  fs.writeFileSync(__dirname + "/id_rsa_pub.pem", keyPair.publicKey);
+  fs.writeFileSync(__dirname + "/public_key.pem", keyPair.publicKey);
 
   // Create the private key file
-  fs.writeFileSync(__dirname + "/id_rsa_priv.pem", keyPair.privateKey);
+  fs.writeFileSync(__dirname + "/private_key.pem", keyPair.privateKey);
 }
 
 // Generate the keypair

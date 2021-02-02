@@ -3,6 +3,8 @@ const router = express.Router();
 const expressValidator = require("express-validator");
 const User = require("../models/User");
 
+const authHelper = require("../utils/authHelper");
+
 // Register a new user
 router.post("/signup", function (req, res, next) {
   const saltHash = authHelper.generatePassword(req.body.password);
