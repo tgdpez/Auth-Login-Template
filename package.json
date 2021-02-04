@@ -4,7 +4,9 @@
   "description": "Boilerplate for quick auth set up",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon server.js",
+    "dev": "concurrently -n 'server,client' \"npm run server\" \"npm run client\"",
+    "client": "cd client && npm start",
     "server": "nodemon server.js"
   },
   "repository": {
@@ -23,7 +25,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-validator": "^6.9.2",
+    "joi": "^17.3.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.13",
     "passport": "^0.4.1",

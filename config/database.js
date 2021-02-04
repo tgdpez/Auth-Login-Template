@@ -16,7 +16,7 @@ function connectToMongoose(environment) {
   const db = mongoose.connection;
   db.on("error", console.error.bind(console, "connection error:"));
   db.on("connected", () => {
-    console.log("Database connected");
+    console.log("DB connected correctly to server");
   });
   // db.once("open", function () {
   //   const silence = new Kitten({ name: "Silence" });

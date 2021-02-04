@@ -1,21 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const { body, validationResult } = require("express-validator");
+const Joi = require("joi");
 const User = require("../models/User");
-
 const authHelper = require("../utils/authHelper");
 
-// Login - Validate an existing user and issue a JWT
-router.post(
-  "/login",
-  body("email").isEmail().normalizeEmail(),
-  body("password").isLength({ min: 3, max: 20 }),
-  function (req, res, next) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+const schema = Joi.object({
+  email: Joi.string().empty().email().min(3).max(15),
+  password: Joi.string().empty().min(3).max(15),
+});
 
+router.post("/login", async function (req, res, next) {
+  const value = await schema.validate({
+    email: req.body.email,
+    password: req.body.password,
+  });
+
+  if (value) {
     User.findOne({ email: req.body.email })
       .then((user) => {
         if (!user) {
@@ -31,12 +31,15 @@ router.post(
         );
 
         if (isValid) {
+          //Issue JWT - Send to client
           const jwt = authHelper.issueJWT(user);
 
           res.status(200).json({
             success: true,
             user: {
               _id: user._id,
+              firstName: user.firstName,
+              lastName: user.lastName,
               email: user.email,
             },
             token: jwt.token,
@@ -49,9 +52,11 @@ router.post(
         }
       })
       .catch((err) => {
-        res.status(400).send("There was an error: ", err.message);
+        res.status(400).json({ error: err });
       });
+  } else {
+    next();
   }
-);
+});
 
 module.exports = router;
