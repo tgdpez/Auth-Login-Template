@@ -5,8 +5,8 @@ const User = require("../models/User");
 const authHelper = require("../utils/authHelper");
 
 const schema = Joi.object({
-  email: Joi.string().empty().email().min(3).max(15),
-  password: Joi.string().empty().min(3).max(15),
+  email: Joi.string().empty().email().min(3).max(30),
+  password: Joi.string().empty().min(3).max(30),
 });
 
 router.post("/login", async function (req, res, next) {
@@ -15,7 +15,7 @@ router.post("/login", async function (req, res, next) {
     password: req.body.password,
   });
 
-  if (value) {
+  if (!value.error) {
     User.findOne({ email: req.body.email })
       .then((user) => {
         if (!user) {
@@ -55,7 +55,11 @@ router.post("/login", async function (req, res, next) {
         res.status(400).json({ error: err });
       });
   } else {
-    next();
+    res.status(401).json({
+      success: false,
+      message: "Your email or password do not meet format requirements",
+      error: value.error,
+    });
   }
 });
 

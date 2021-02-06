@@ -14,6 +14,8 @@ function validPassword(password, hash, salt) {
 }
 
 function generatePassword(password) {
+  console.log("Loggin the incoming password from authHelper: ", password);
+
   const salt = crypto.randomBytes(32).toString("hex");
   const generateHash = crypto
     .pbkdf2Sync(password, salt, 10000, 64, "sha512")
