@@ -8,7 +8,11 @@ router.get(
   (req, res, next) => {
     res.status(200).json({
       success: true,
-      profile: req.user.profile,
+      profile: {
+        _id: req.user._id,
+        email: req.user.email,
+        createdOn: req.user.createdOn,
+      },
       msg: "You are successfully authenticated to this route!",
     });
   }

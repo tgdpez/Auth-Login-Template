@@ -1,11 +1,14 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 export default function Signup() {
-  const [error, setError] = React.useState(null);
+  const [error, setError] = React.useState("");
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+
+  const history = useHistory();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -16,8 +19,6 @@ export default function Signup() {
       email: email,
       password: password,
     };
-
-    console.log("Credentials being sent: ", credentials);
 
     try {
       let res = await fetch("http://localhost:5000/users/signup", {
@@ -31,8 +32,16 @@ export default function Signup() {
       });
 
       let data = await res.json();
-      console.log(data);
-      return data;
+
+      //Check response - if error, display it
+      if (res.status !== 202 || data.success === false) {
+        setError(data.message);
+        return;
+      } else {
+        //Token coming back is stored in cookie
+        console.log("Data coming back: ", data);
+        // history.push("/dashboard");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -94,7 +103,7 @@ export default function Signup() {
       >
         Submit
       </button>
-      <p className="forgot-password text-right"></p>
+      <p className="error">{error}</p>
     </form>
   );
 }

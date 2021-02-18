@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-require("dotenv").config();
 
 const Kitten = require("../models/kittySchema");
 const User = require("../models/User");

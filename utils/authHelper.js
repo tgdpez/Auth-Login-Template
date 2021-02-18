@@ -14,8 +14,6 @@ function validPassword(password, hash, salt) {
 }
 
 function generatePassword(password) {
-  console.log("Loggin the incoming password from authHelper: ", password);
-
   const salt = crypto.randomBytes(32).toString("hex");
   const generateHash = crypto
     .pbkdf2Sync(password, salt, 10000, 64, "sha512")
@@ -29,10 +27,9 @@ function generatePassword(password) {
 
 //Set the JWT `sub` payload property to the MongoDB user ID
 function issueJWT(user) {
-  const _id = user._id;
   const expiresIn = "1d";
   const payload = {
-    sub: _id,
+    sub: user._id,
     iat: Date.now(),
   };
 
@@ -41,9 +38,10 @@ function issueJWT(user) {
     algorithm: "RS256",
   });
 
+  //NOT prepending "Bearer " to signedToken because this is not being sent in the authorization header.
+  //Instead, it's being stored and sent as a cookie to the client.
   return {
-    token: "Bearer " + signedToken,
-    expires: expiresIn,
+    token: signedToken,
   };
 }
 

@@ -25,19 +25,15 @@ router.post("/signup", async function (req, res, next) {
     password: req.body.password,
   });
 
-  console.log("Validated credentials: ", value);
-
   if (!value.error) {
-    const alreadyExists = await User.findOne({ email: req.body.email });
-    console.log("alreadyExistsVariable: ", alreadyExists);
     //Check if user already exists
+    const alreadyExists = await User.findOne({ email: req.body.email });
     if (alreadyExists) {
       //Return error
       return res.status(409).send({ message: "User already exists" });
     } else {
       try {
         //Encrypt credentials
-        console.log("value before generatePasswrod: ", value);
         const saltHash = authHelper.generatePassword(req.body.password);
         const salt = saltHash.salt;
         const hash = saltHash.hash;
@@ -49,22 +45,24 @@ router.post("/signup", async function (req, res, next) {
         });
         //Save user to database
         newUser.save().then((user) => {
-          //Issue JWT - Send to client
+          //Signs jwt with the helper function
           const jwt = authHelper.issueJWT(user);
-          res.json({
-            success: true,
-            user: {
-              _id: user._id,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              email: user.email,
-            },
-            token: jwt.token,
-            expiresIn: jwt.expires,
-          });
+          //Signs cookie through cookie-parser secret in server.js
+          res
+            .cookie("token", jwt, {
+              //1hour in milliseconds
+              maxAge: 3600000,
+              httpOnly: true,
+              signed: true,
+            })
+            .status(202)
+            .json({
+              success: true,
+              message: "Signup Successful",
+            });
         });
       } catch (err) {
-        return res.json({ success: false, msg: err });
+        return res.json({ success: false, message: err });
       }
     }
   } else {
