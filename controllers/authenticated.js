@@ -1,19 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const checkSignedCookie = require("../utils/checkSignedCookie");
 
-router.get(
-  "/resource123",
+router.post(
+  "/authenticated",
+  checkSignedCookie,
   passport.authenticate("authenticateJWT", { session: false }),
   (req, res, next) => {
     res.status(200).json({
       success: true,
-      profile: {
-        _id: req.user._id,
-        email: req.user.email,
-        createdOn: req.user.createdOn,
-      },
-      msg: "Access to resource granted",
+      msg: "You are authenticated",
     });
   }
 );

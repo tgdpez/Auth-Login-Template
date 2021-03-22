@@ -1,50 +1,32 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { useAuth } from "../utils/provideAuth";
 
 export default function Signup() {
-  const [error, setError] = React.useState("");
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const history = useHistory();
+  let history = useHistory();
+  let auth = useAuth();
+  const error = auth.error;
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
     const credentials = {
-      firstname: firstName,
+      firstName: firstName,
       lastName: lastName,
       email: email,
       password: password,
     };
 
-    try {
-      let res = await fetch("http://localhost:5000/users/signup", {
-        method: "POST",
-        credentials: "include",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      });
-
-      let data = await res.json();
-
-      //Check response - if error, display it
-      if (res.status !== 202 || data.success === false) {
-        setError(data.message);
-        return;
-      } else {
-        //Token coming back is stored in cookie
-        console.log("Data coming back: ", data);
-        // history.push("/dashboard");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    auth.signup(credentials, () => {
+      //Redirect to dashboard - Because of context - the app will know to
+      //allow the user to reach the page - or redirect them to login.
+      history.push("/dashboard");
+    });
   };
 
   //Run input validation
@@ -96,11 +78,7 @@ export default function Signup() {
         />
       </div>
 
-      <button
-        type="submit"
-        // enabled={Boolean(error).toString()}
-        className="btn btn-dark btn-lg btn-block"
-      >
+      <button type="submit" className="btn btn-dark btn-lg btn-block">
         Submit
       </button>
       <p className="error">{error}</p>

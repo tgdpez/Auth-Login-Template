@@ -20,7 +20,7 @@ app.use(
   })
 );
 
-require("./passport/jwtStrategy")(passport);
+require("./passport/authenticateJWT")(passport);
 app.use(passport.initialize());
 
 // app.use(express.static(path.join(__dirname, "/client/public")));

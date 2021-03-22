@@ -1,14 +1,36 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
+import { useAuth } from "../utils/provideAuth";
 
-export default function login() {
+export default function Login() {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  let history = useHistory();
+  let auth = useAuth();
+  let error = auth.error;
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const credentials = {
+      email: email,
+      password: password,
+    };
+
+    auth.login(credentials, () => {
+      history.push("/dashboard");
+    });
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <h3>Log in</h3>
-
       <div className="form-group">
         <label>Email</label>
         <input
           type="email"
+          onChange={(event) => setEmail(event.target.value)}
           className="form-control"
           placeholder="Enter email"
         />
@@ -18,6 +40,7 @@ export default function login() {
         <label>Password</label>
         <input
           type="password"
+          onChange={(event) => setPassword(event.target.value)}
           className="form-control"
           placeholder="Enter password"
         />
@@ -36,10 +59,15 @@ export default function login() {
         </div>
       </div>
 
-      <button type="submit" className="btn btn-dark btn-lg btn-block">
+      <button
+        type="submit"
+        onSubmit={handleSubmit}
+        className="btn btn-dark btn-lg btn-block"
+      >
         Sign in
       </button>
       <p className="forgot-password text-right"></p>
+      <p className="error">{error}</p>
     </form>
   );
 }

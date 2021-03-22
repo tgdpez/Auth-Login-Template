@@ -1,15 +1,21 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { useAuth } from "../utils/provideAuth";
 
 const SignoutBtn = () => {
-  let history = useHistory();
-  //TODO: Destroy jwt cookie
-  //TODO: Redirect to login page
-  const handleClick = () => history.push("/");
+  let auth = useAuth();
+  const history = useHistory();
+
+  const handleClick = () => {
+    auth.logout((data) => {
+      console.log({ data });
+      history.push("/login");
+    });
+  };
+
   return (
     <button type="button" onClick={handleClick}>
-      {" "}
-      Sign out{" "}
+      <h5>Sign out</h5>
     </button>
   );
 };

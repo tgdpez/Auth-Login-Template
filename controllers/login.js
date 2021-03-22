@@ -15,15 +15,11 @@ router.post("/login", async function (req, res, next) {
     password: req.body.password,
   });
 
+  // console.log("Verifying the value: ", value);
+
   if (!value.error) {
     User.findOne({ email: req.body.email })
       .then((user) => {
-        if (!user) {
-          res
-            .status(401)
-            .json({ success: false, msg: "email or password is incorrect" });
-        }
-
         const isValid = authHelper.validPassword(
           req.body.password,
           user.hash,
@@ -34,25 +30,30 @@ router.post("/login", async function (req, res, next) {
           //Issue JWT - Send to client
           const jwt = authHelper.issueJWT(user);
 
-          res.status(200).json({
-            success: true,
-            user: {
+          res
+            .cookie("testSiteCookie", jwt, {
+              //1hour in milliseconds
+              maxAge: 3600000,
+              httpOnly: true,
+              signed: true,
+            })
+            .status(200)
+            .json({
+              success: true,
+              message: "Login Successful",
               _id: user._id,
               firstName: user.firstName,
               lastName: user.lastName,
               email: user.email,
-            },
-            token: jwt.token,
-            expiresIn: jwt.expires,
-          });
-        } else {
-          res
-            .status(401)
-            .json({ success: false, msg: "you entered the wrong password" });
+              expiresIn: jwt.expires,
+            });
         }
       })
       .catch((err) => {
-        res.status(400).json({ error: err });
+        res.status(400).json({
+          success: false,
+          message: "Email or password is incorrect",
+        });
       });
   } else {
     res.status(401).json({

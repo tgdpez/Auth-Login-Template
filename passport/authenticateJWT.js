@@ -11,10 +11,11 @@ const PUB_KEY = fs.readFileSync(pathToPublicKey, "utf8");
 //instead of req.cookies (More secure)
 const cookieExtractor = (req) => {
   let jwtToken = null;
-  if (req && req.signedCookies) {
-    jwtToken = req.signedCookies["token"]["token"];
+  // console.log("req.signedCookies: ", req.signedCookies);
+  if (req && req.signedCookies.testSiteCookie) {
+    jwtToken = req.signedCookies["testSiteCookie"]["token"];
   } else {
-    return { message: "cookie error" };
+    return { error: "Cookie not valid" };
   }
   return jwtToken;
 };
@@ -29,11 +30,11 @@ const options = {
 
 module.exports = function (passport) {
   passport.use(
-    "jwt",
+    "authenticateJWT",
     new JwtStrategy(options, function (jwt_payload, done) {
       //Check cookie jwt payload sub matches user from database
       User.findOne({ _id: jwt_payload.sub }, function (err, user) {
-        console.log("Logging the user: ", user);
+        // console.log("Logging the user: ", user);
         if (err) {
           return done(err, false);
         }
