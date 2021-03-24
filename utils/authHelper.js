@@ -29,7 +29,10 @@ function generatePassword(password) {
 function issueJWT(user) {
   const expiresIn = "1d";
   const payload = {
+    //Mongodb automatically creates _id
+    //Store this along with email inside cookie to later verify against
     sub: user._id,
+    email: user.email,
     iat: Date.now(),
   };
 

@@ -7,11 +7,15 @@ router.post(
   "/authenticated",
   checkSignedCookie,
   passport.authenticate("authenticateJWT", { session: false }),
-  (req, res, next) => {
-    res.status(200).json({
-      success: true,
-      msg: "You are authenticated",
-    });
+  (req, res) => {
+    res
+      .status(200)
+      .json({
+        success: true,
+        msg: "You are authenticated",
+        data: req.user,
+      })
+      .end();
   }
 );
 

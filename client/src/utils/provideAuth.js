@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext, createContext } from "react";
-import { useHistory } from "react-router-dom";
 const authContext = createContext();
 
 export function ProvideAuth({ children }) {
@@ -31,20 +30,18 @@ const isAuthenticated = async () => {
 
 // Provider hook that creates auth object and handles state
 function useProvideAuth() {
-  const history = useHistory();
   const [user, setUser] = useState({ success: false });
-  const [authenticated, setAuthenticated] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
     //Check if client already has signed cookie
     isAuthenticated().then((result) => {
-      console.log("Checking auth result inside provide auth: ", result);
+      console.log("Checking auth result inside provide auth: ", result.data);
       if (result.success) {
-        setAuthenticated(true);
+        setUser(result.data);
       }
     });
-  }, [history]);
+  }, []);
 
   const login = async (credentials, cb) => {
     try {
@@ -62,7 +59,7 @@ function useProvideAuth() {
       console.log("Login Hook: ", data);
 
       if (data.success) {
-        setUser({ data });
+        setUser(data);
         cb();
       } else if (!data.success) {
         //Display error
@@ -91,7 +88,7 @@ function useProvideAuth() {
       console.log("Singup Hook: ", data);
 
       if (data.success) {
-        setUser({ data });
+        setUser(data);
         cb();
       } else if (!data.success) {
         //Display error
@@ -124,7 +121,6 @@ function useProvideAuth() {
 
   // Return the user object and auth methods
   return {
-    authenticated,
     user,
     login,
     signup,

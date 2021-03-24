@@ -21,6 +21,7 @@ export default function Login() {
     auth.login(credentials, () => {
       history.push("/dashboard");
     });
+
   };
 
   return (

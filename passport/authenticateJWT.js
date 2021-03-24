@@ -26,12 +26,13 @@ const options = {
   jwtFromRequest: cookieExtractor,
   secretOrKey: PUB_KEY,
   algorithms: ["RS256"],
+  passReqToCallback: true,
 };
 
 module.exports = function (passport) {
   passport.use(
     "authenticateJWT",
-    new JwtStrategy(options, function (jwt_payload, done) {
+    new JwtStrategy(options, function (req, jwt_payload, done) {
       //Check cookie jwt payload sub matches user from database
       User.findOne({ _id: jwt_payload.sub }, function (err, user) {
         // console.log("Logging the user: ", user);
@@ -39,7 +40,14 @@ module.exports = function (passport) {
           return done(err, false);
         }
         if (user) {
-          return done(null, user);
+          const filterUser = {
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            createdOn: user.createdOn
+          }
+          return done(null, filterUser);
         } else {
           return done(null, false);
           // or you could create a new account
