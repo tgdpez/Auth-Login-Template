@@ -11,7 +11,7 @@ export default function Dashboard() {
   const SignoutBtn = () => {
     const handleClick = () => {
       auth.logout((data) => {
-        console.log({ data });
+        console.log(data);
         history.push("/login");
       });
     };

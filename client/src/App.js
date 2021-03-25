@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import * as React from "react";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import {
@@ -15,8 +15,47 @@ import Dashboard from "./components/Dashboard";
 import { useAuth } from "./utils/provideAuth";
 
 function App() {
-  // let location = useLocation();
   let auth = useAuth();
+
+  function CustomRoute({ children, ...rest }) {
+    return (
+      <Route
+        {...rest}
+        render={({ location }) =>
+          auth.user._id ? (
+            <Redirect
+              to={{
+                pathname: "/dashboard",
+                state: { from: location },
+              }}
+            />
+          ) : (
+            children
+          )
+        }
+      />
+    );
+  }
+
+  function PrivateRoute({ children, ...rest }) {
+    return (
+      <Route
+        {...rest}
+        render={({ location }) =>
+          auth.user._id ? (
+            children
+          ) : (
+            <Redirect
+              to={{
+                pathname: "/login",
+                state: { from: location },
+              }}
+            />
+          )
+        }
+      />
+    );
+  }
 
   return (
     <Router>
@@ -46,18 +85,21 @@ function App() {
         <div className="outer">
           <div className="inner">
             <Switch>
-              <Route exact path="/">
-                <Login/>
-              </Route>
-              <Route path="/login" render={routeProps => (
-                <Login {...routeProps}/>
-              )} />
-              <Route path="/signup">
-                <Signup/>
-              </Route>
-              <Route path="/dashboard">
-                <Dashboard/>
-              </Route>
+              <CustomRoute exact path="/">
+                <Login />
+              </CustomRoute>
+              <CustomRoute exact path="/login">
+                <Login />
+              </CustomRoute>
+              <CustomRoute path="/signup">
+                <Signup />
+              </CustomRoute>
+              <PrivateRoute path="/dashboard">
+                <Dashboard />
+              </PrivateRoute>
+              <PrivateRoute path="/*">
+                <Dashboard />
+              </PrivateRoute>
             </Switch>
           </div>
         </div>
