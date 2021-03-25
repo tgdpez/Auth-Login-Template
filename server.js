@@ -1,4 +1,5 @@
 require("dotenv").config();
+const path = require("path");
 const express = require("express");
 const passport = require("passport");
 const cors = require("cors");
@@ -23,7 +24,7 @@ app.use(
 require("./passport/authenticateJWT")(passport);
 app.use(passport.initialize());
 
-// app.use(express.static(path.join(__dirname, "/client/public")));
+app.use(express.static(path.join(__dirname, "/client/public")));
 
 app.use("/", require("./routes/index"));
 
