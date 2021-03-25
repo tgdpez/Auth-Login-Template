@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import Loading from "./components/Loading";
-import { AuthenticatedApp } from "./Authenticated-app";
+import { AuthenticatedApp } from "./authenticated-app";
 
 function App() {
   const { isAuthenticated, loginWithRedirect, isLoading, error } = useAuth0();

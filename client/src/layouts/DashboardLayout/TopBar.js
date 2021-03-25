@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 /** @jsxImportSource @emotion/react */
 import { jsx } from "@emotion/react";
-import Logo from "../../components/Logo";
+import Logo from "../../components/logo";
 
 const navbarToggler = {
   top: ".25rem",
