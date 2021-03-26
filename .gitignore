@@ -108,3 +108,4 @@ dist
 # *.properties
 private_key.pem
 public_key.pem
+bfg-1.14.0.jar
