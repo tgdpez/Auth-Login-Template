@@ -67,7 +67,7 @@ node generateKeyPair.js
 
 This will generate a public and private key in the root directory. Make sure you don't somehow upload this to github. There are a couple of options.
 
-- Check the root .gitignore file has the lines below. This should prevent the upload of the keys. (If they are accidentally uploaded, delete the files and re-generate them. Try the second option below):
+- Check the root .gitignore file has the lines below. This should prevent the upload of the keys. (If they are accidentally uploaded, delete the files and use git commit --amend to remove it from git history. Once deleted and this has been added to .gitignore, you can re-generate them.):
 
 ```
 #Keys
@@ -77,7 +77,7 @@ private_key.pem
 public_key.pem
 ```
 
-- Second option is to generate the files, and then use an online UTF8 converter. Copy the converted public and private UTF8 into a .env file, and instead of using node's file system (current set up), point to it with process.env.PUB_KEY or process.env.PRIV_KEY. You'll need to update in three places (authenticateJWT.js, authHelper.js, and server.js)
+- Alternatively, you can generate the keys, and then use an online UTF8 converter. Copy the converted public and private UTF8 into a .env file, and instead of using node's file system (current set up), point to it with process.env.PUB_KEY or process.env.PRIV_KEY. You'll need to update in three places (authenticateJWT.js, authHelper.js, and server.js)
 
 ### Contributing
 
