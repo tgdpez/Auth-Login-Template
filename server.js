@@ -1,4 +1,5 @@
 require("dotenv").config();
+const fs = require("fs");
 const path = require("path");
 const express = require("express");
 const passport = require("passport");
@@ -7,7 +8,8 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const PRIV_KEY = process.env.PRIV_KEY;
+const pathToKey = path.join(__dirname, "private_key.pem");
+const PRIV_KEY = fs.readFileSync(pathToKey, "utf8");
 
 require("./config/database");
 

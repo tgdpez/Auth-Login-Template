@@ -20,11 +20,14 @@ const isAuthenticated = async () => {
         "Content-Type": "application/json",
       },
     });
-
+    console.log("Data coming in nOW: ", await res);
     const data = await res.json();
     return data;
   } catch (error) {
-    console.log(error);
+    console.log(
+      "There was an error: ",
+      error
+    );
   }
 };
 

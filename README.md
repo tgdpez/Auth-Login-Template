@@ -1,6 +1,14 @@
-# Auth-Login-Templates
+# Node Express Auth Login
 
-> Boilerplate for quick auth set up. This "component library" groups together different references for auth setups - implementing different methods. Toggle through different branches to see the other variations.
+> Simple auth set up for a more custom approach with Passport Js and React
+
+- Back-end: Node, Express, Passport, JWT, MongoDB
+- Front-end: React
+- This follows some guidance from Zach Gollwitzer's auth tutorials found [here](https://www.youtube.com/playlist?list=PLYQSCk-qyTW2ewJ05f_GKHtTIzjynDgjK).
+- It also implements storing the jwt inside a signed cookie - and verifying that with a custom extractor function in Passport. ([Documentation Here](http://www.passportjs.org/packages/passport-jwt/))
+- Routing has been implemented using context, following react router's documentation [here](https://reactrouter.com/web/example/auth-workflow) and [here](https://usehooks.com/useAuth/).
+- A request is made to the server to destroy cookie upon logout.
+- Joi is used for back-end input validation
 
 ### Prerequisites
 
@@ -20,7 +28,6 @@ Start with cloning this repo on your local machine:
 
 ```
 git clone git@github.com:tgdpez/Auth-Login-Template.git
-
 cd Auth-Login-Template
 ```
 
@@ -40,7 +47,7 @@ npm install
 npm run dev
 ```
 
-Or if you wanted to run front and back end on separate terminals:
+Or if you wanted to run front and back end on separate terminal (for debugging):
 
 ```
 npm run client
@@ -50,29 +57,46 @@ npm run client
 npm run server
 ```
 
+#### Generating Public & Private Keys
+
+From the main directory run
+
+```
+node generateKeyPair.js
+```
+
+This will generate a public and private key in the root directory. Make sure you don't somehow upload this to github. There are a couple of options.
+
+- Check the root .gitignore file has the lines below. This should prevent the upload of the keys. (If they are accidentally uploaded, delete the files and re-generate them. Try the second option below):
+
+```
+#Keys
+# *.pem
+# *.properties
+private_key.pem
+public_key.pem
+```
+
+- Second option is to generate the files, and then use an online UTF8 converter. Copy the converted public and private UTF8 into a .env file, and instead of using node's file system (current set up), point to it with process.env.PUB_KEY or process.env.PRIV_KEY. You'll need to update in three places (authenticateJWT.js, authHelper.js, and server.js)
+
 ### Contributing
 
 ---
 
-Message, comment, or pull request. Open to constructive criticism or suggestions that can help me improve.
+Message, comment, or pull request. This was mainly done as practice and in hopes of having a point of reference for the future. Open to constructive criticism or suggestions to improve. Looking to make other repos with other Auth methods for reference.
 
 ### Roadmap
 
 ---
 
-- Mainly DEV implementation and not for prod. Still need to test deployment.
-- Will continue to add branches as I come across the need for more auth references
-- These compilations are still a little rough and need to be cleaned up more
-- Code could use refactoring. Will refactor as I have time.
+- Mainly for dev testing and reference, not for prod. Still need to test with an actual deployment.
 
-### Main Branch - Express, Passport, and JWT Authentication
+- Will make new branches if any variations or updates come up.
+
+- Code is repetitive and could use refactoring. Will refactor as I have time.
+
+### Project Status
 
 ---
 
-- Node, Express, Passport back-end
-- React front-end
-- This follows some guidance from Zach Gollwitzer's auth tutorials found [here](https://www.youtube.com/playlist?list=PLYQSCk-qyTW2ewJ05f_GKHtTIzjynDgjK).
-- It also implements storing the jwt inside a signed cookie - and verifying that with a custom extractor function in Passport. ([Documentation Here](http://www.passportjs.org/packages/passport-jwt/))
-- Routing has been implementing following documentation from [here](https://reactrouter.com/web/example/auth-workflow) and [here](https://usehooks.com/useAuth/).
-- A request is made to destroy cookie upon logout.
-- Using Joi for back-end validation
+Low to minimal maintenance.

@@ -45,8 +45,8 @@ module.exports = function (passport) {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            createdOn: user.createdOn
-          }
+            createdOn: user.createdOn,
+          };
           return done(null, filterUser);
         } else {
           return done(null, false);
