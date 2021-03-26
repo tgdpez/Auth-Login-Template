@@ -1,6 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { useAuth, ConsumeAuth } from "../utils/provideAuth";
+import { useAuth } from "../utils/provideAuth";
 
 export default function Dashboard() {
   const auth = useAuth();
